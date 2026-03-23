@@ -1,0 +1,887 @@
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0fdf4;color:#1a1a1a;min-height:100vh}
+:root{--g1:#166534;--g2:#16a34a;--g3:#22c55e;--g4:#bbf7d0;--g5:#f0fdf4;--dark:#052e16;--mid:#14532d}
+/* TOPBAR */
+.topbar{background:linear-gradient(135deg,#052e16 0%,#14532d 100%);padding:0 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:1px solid #166534}
+.logo-wrap{display:flex;align-items:center;gap:12px;padding:12px 0;cursor:pointer}
+.logo-svg{width:46px;height:46px}
+.logo-txt h1{color:#22c55e;font-size:1.25em;font-weight:800;letter-spacing:-0.3px}
+.logo-txt p{color:#86efac;font-size:0.7em;letter-spacing:1.2px;text-transform:uppercase}
+.nav{display:flex;gap:4px;align-items:center}
+.nb{background:none;border:1px solid transparent;color:#86efac;padding:7px 13px;border-radius:20px;cursor:pointer;font-size:0.82em;font-weight:500;transition:all .2s;white-space:nowrap}
+.nb:hover,.nb.on{background:rgba(34,197,94,.15);border-color:#22c55e;color:#22c55e}
+.nb.alert-nb{color:#fca5a5;border-color:#ef4444}
+.nb.alert-nb:hover,.nb.alert-nb.on{background:rgba(239,68,68,.15)}
+/* TICKER */
+.ticker{background:#991b1b;color:white;padding:9px 20px;display:flex;align-items:center;gap:10px;overflow:hidden}
+.ticker-label{background:white;color:#991b1b;font-weight:800;font-size:0.72em;padding:3px 8px;border-radius:4px;white-space:nowrap;letter-spacing:.5px}
+.ticker-track{overflow:hidden;flex:1}
+.ticker-inner{display:flex;gap:48px;animation:tick 32s linear infinite;white-space:nowrap}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ti{font-size:0.85em}
+/* PAGES */
+.page{display:none;animation:pageIn .25s ease}
+.page.on{display:block}
+@keyframes pageIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.wrap{max-width:1280px;margin:0 auto;padding:24px 20px}
+/* HERO SECTION */
+.hero{background:linear-gradient(135deg,#052e16,#14532d,#166534);padding:48px 20px;text-align:center;color:white}
+.hero-badge{display:inline-block;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);color:#86efac;font-size:0.75em;padding:6px 16px;border-radius:20px;margin-bottom:20px;letter-spacing:1px;text-transform:uppercase}
+.hero h2{font-size:2.4em;font-weight:800;line-height:1.15;margin-bottom:16px;letter-spacing:-0.5px}
+.hero h2 span{color:#22c55e}
+.hero-sub{color:#a7f3d0;font-size:1em;max-width:600px;margin:0 auto 32px;line-height:1.7}
+/* Hunger stats row */
+.hunger-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;background:rgba(0,0,0,.25);border-radius:16px;padding:24px;margin:0 auto 32px;max-width:900px;border:1px solid rgba(34,197,94,.15)}
+.hstat{text-align:center}
+.hstat-num{font-size:1.8em;font-weight:800;color:#22c55e}
+.hstat-lbl{font-size:0.75em;color:#a7f3d0;margin-top:4px;line-height:1.4}
+/* Live counter */
+.live-counter-box{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:12px;padding:16px 24px;display:inline-flex;align-items:center;gap:16px;margin-bottom:16px}
+.lc-pulse{width:10px;height:10px;border-radius:50%;background:#ef4444;animation:lcp 1s infinite}
+@keyframes lcp{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.lc-text{color:#fca5a5;font-size:0.85em}
+.lc-num{color:white;font-size:1.4em;font-weight:800}
+/* Quote cards */
+.quote-card{background:rgba(255,255,255,.06);border-left:3px solid #22c55e;padding:16px 20px;border-radius:8px;margin-top:20px;max-width:700px;margin-left:auto;margin-right:auto}
+.quote-card q{color:#d1fae5;font-style:italic;font-size:0.95em;line-height:1.7}
+.quote-card .attr{color:#6ee7b7;font-size:0.78em;margin-top:8px}
+/* GRID layouts */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
+@media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr}}
+/* CARDS */
+.card{background:white;border-radius:14px;padding:22px;box-shadow:0 1px 10px rgba(0,0,0,.06)}
+.card h3{font-size:1em;font-weight:600;color:#166534;margin-bottom:14px;padding-bottom:10px;border-bottom:1.5px solid #dcfce7;display:flex;align-items:center;gap:7px}
+/* Stats cards */
+.sc{background:white;border-radius:12px;padding:18px;text-align:center;border-top:3px solid #22c55e}
+.sc .ico{font-size:1.7em;margin-bottom:6px}
+.sc .num{font-size:2em;font-weight:800;color:#166534}
+.sc .lbl{font-size:0.78em;color:#6b7280;margin-top:3px}
+/* Form elements */
+.fr{margin-bottom:14px}
+.fr label{display:block;font-size:0.82em;font-weight:600;color:#374151;margin-bottom:5px}
+.fr input,.fr select,.fr textarea{width:100%;padding:9px 12px;border:1.5px solid #d1fae5;border-radius:8px;font-size:0.88em;font-family:inherit;background:#f0fdf4;outline:none;transition:border .2s,background .2s}
+.fr input:focus,.fr select:focus,.fr textarea:focus{border-color:#16a34a;background:white}
+.fr textarea{resize:vertical;min-height:64px}
+/* Chips */
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.chip{padding:6px 13px;border:1.5px solid #d1fae5;border-radius:20px;cursor:pointer;font-size:0.8em;font-weight:500;background:#f0fdf4;color:#166534;transition:all .2s}
+.chip.on{background:#16a34a;color:white;border-color:#16a34a}
+.citychip{padding:7px 14px;border:1.5px solid #d1fae5;border-radius:20px;cursor:pointer;font-size:0.82em;font-weight:600;background:#f0fdf4;color:#166534;transition:all .2s}
+.citychip.on{background:#166534;color:white;border-color:#166534}
+/* Urgency */
+.urgrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+.ub{padding:9px;border:1.5px solid #e5e7eb;border-radius:8px;cursor:pointer;text-align:center;font-size:0.8em;font-weight:600;background:white;transition:all .2s}
+.ub.low.on{background:#22c55e;color:white;border-color:#22c55e}
+.ub.med.on{background:#f59e0b;color:white;border-color:#f59e0b}
+.ub.high.on{background:#ef4444;color:white;border-color:#ef4444}
+/* Buttons */
+.btn{border:none;padding:11px 18px;border-radius:10px;font-size:0.88em;font-weight:700;cursor:pointer;width:100%;margin-top:8px;transition:transform .15s,box-shadow .15s;letter-spacing:.2px}
+.btn-g{background:linear-gradient(135deg,#166534,#16a34a);color:white}
+.btn-g:hover{transform:scale(1.02);box-shadow:0 4px 12px rgba(22,101,52,.3)}
+.btn-r{background:linear-gradient(135deg,#991b1b,#dc2626);color:white}
+.btn-r:hover{transform:scale(1.02);box-shadow:0 4px 12px rgba(220,38,38,.3)}
+/* ALERT CARDS */
+.alcard{border-radius:12px;padding:15px;margin-bottom:12px;animation:cardIn .3s ease}
+@keyframes cardIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.alcard.urg{border-left:4px solid #ef4444;background:#fff5f5}
+.alcard.med{border-left:4px solid #f59e0b;background:#fffbeb}
+.alcard.low{border-left:4px solid #22c55e;background:#f0fdf4}
+.alcard .ah{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.alcard .at{font-weight:600;font-size:.9em}
+.alcard .am{display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:.78em;color:#555;margin-bottom:10px}
+.alcard .ar{display:flex;gap:7px}
+.bsm{flex:1;padding:7px;border:none;border-radius:7px;cursor:pointer;font-size:.78em;font-weight:600;transition:all .2s}
+.bsm.grn{background:#166534;color:white}
+.bsm.gray{background:#f3f4f6;color:#6b7280}
+.bsm.blu{background:#1d4ed8;color:white}
+/* BADGE */
+.badge{display:inline-block;padding:3px 9px;border-radius:10px;font-size:.72em;font-weight:700}
+.b-red{background:#fecaca;color:#991b1b}
+.b-grn{background:#d1fae5;color:#065f46}
+.b-amb{background:#fef3c7;color:#92400e}
+.b-blue{background:#dbeafe;color:#1e40af}
+.b-gold{background:#fef9c3;color:#713f12}
+.b-purple{background:#ede9fe;color:#5b21b6}
+/* HERO CARDS - Leaderboard / Honor */
+.hero-profile{background:white;border-radius:14px;padding:20px;margin-bottom:14px;display:flex;align-items:center;gap:16px;border:1.5px solid #d1fae5;transition:all .2s}
+.hero-profile:hover{border-color:#16a34a;box-shadow:0 4px 14px rgba(22,163,74,.1)}
+.hero-avatar{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.1em;color:white;flex-shrink:0}
+.hero-info{flex:1}
+.hero-name{font-weight:700;font-size:.95em;color:#166534}
+.hero-city{font-size:.75em;color:#6b7280;margin-top:2px}
+.hero-rank{font-size:1.6em;font-weight:800;color:#d1d5db;min-width:32px;text-align:center}
+.hero-stat{text-align:right}
+.hero-stat .hs-num{font-size:1.4em;font-weight:800;color:#166534}
+.hero-stat .hs-lbl{font-size:.72em;color:#9ca3af}
+/* Progress bar */
+.prog-wrap{margin-top:6px}
+.prog-bar{height:5px;background:#e5e7eb;border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#16a34a,#22c55e);transition:width .6s}
+/* Honor wall */
+.honor-card{background:linear-gradient(135deg,#fefce8,#fef9c3);border:1.5px solid #fde68a;border-radius:14px;padding:20px;text-align:center;position:relative;overflow:hidden}
+.honor-card::before{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;background:rgba(251,191,36,.1);border-radius:50%}
+.honor-crown{font-size:2.5em;margin-bottom:8px}
+.honor-name{font-weight:800;color:#713f12;font-size:1.05em}
+.honor-badge-lbl{font-size:.75em;color:#92400e;margin-top:4px}
+.honor-medal{position:absolute;top:12px;right:12px;font-size:1.5em}
+/* NGO card */
+.ngo-card{background:white;border-radius:12px;padding:15px;margin-bottom:11px;border:1.5px solid #d1fae5}
+.ngo-hd{display:flex;align-items:center;gap:11px;margin-bottom:9px}
+.ngo-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#166534,#22c55e);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:.85em;flex-shrink:0}
+/* Impact section */
+.impact-sec{background:linear-gradient(135deg,#052e16,#14532d);border-radius:14px;padding:22px;color:white;margin-bottom:22px}
+.impact-sec h3{color:#86efac;font-size:.95em;margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.imp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px}
+.imp-item{background:rgba(255,255,255,.07);padding:12px;border-radius:10px;text-align:center;border:1px solid rgba(34,197,94,.15)}
+.imp-val{font-size:1.5em;font-weight:800;color:#22c55e}
+.imp-lbl{font-size:.72em;color:#a7f3d0;margin-top:3px}
+/* Section header */
+.sec-hd{font-size:1.1em;font-weight:700;color:#166534;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.dot-live{width:7px;height:7px;background:#22c55e;border-radius:50%;display:inline-block;animation:lcp 1.2s infinite}
+/* Score bar */
+.sbar{height:5px;background:#e5e7eb;border-radius:3px;overflow:hidden;margin-top:5px}
+.sfill{height:100%;border-radius:3px;background:linear-gradient(90deg,#16a34a,#22c55e)}
+/* Community feed */
+.feed-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid #f3f4f6}
+.feed-ico{width:36px;height:36px;border-radius:50%;background:#f0fdf4;border:1.5px solid #d1fae5;display:flex;align-items:center;justify-content:center;font-size:1.1em;flex-shrink:0}
+.feed-text{font-size:.83em;color:#374151;line-height:1.5}
+.feed-time{font-size:.72em;color:#9ca3af;margin-top:2px}
+/* Scroll container for leaderboard */
+.scroll-box{max-height:420px;overflow-y:auto;padding-right:4px}
+.scroll-box::-webkit-scrollbar{width:4px}
+.scroll-box::-webkit-scrollbar-track{background:#f0fdf4}
+.scroll-box::-webkit-scrollbar-thumb{background:#86efac;border-radius:2px}
+/* Empty */
+.empty{text-align:center;padding:32px;color:#9ca3af}
+.empty span{display:block;font-size:2em;margin-bottom:10px}
+/* Toast */
+.toast{position:fixed;top:20px;right:20px;padding:13px 18px;border-radius:10px;font-size:.85em;font-weight:600;color:white;z-index:9999;animation:cardIn .25s ease;max-width:300px;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+</style>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="logo-wrap" onclick="showPage('home')">
+    <svg class="logo-svg" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="23" cy="23" r="22" fill="#052e16" stroke="#22c55e" stroke-width="1.2"/>
+      <path d="M27 5L15 23h9L18 41l15-22h-9L27 5Z" fill="#22c55e"/>
+      <path d="M35 8C35 8 40 12 38.5 17.5C37 23 31.5 21.5 31.5 21.5C31.5 21.5 31.5 16 35 8Z" fill="#16a34a"/>
+      <path d="M35 8C33.5 14 31.5 21.5 31.5 21.5" stroke="#052e16" stroke-width=".8" stroke-linecap="round"/>
+      <circle cx="11" cy="11" r="1.8" fill="#86efac" opacity=".7"/>
+      <circle cx="17" cy="7" r="1.3" fill="#86efac" opacity=".5"/>
+      <circle cx="8" cy="17" r="1.1" fill="#86efac" opacity=".4"/>
+    </svg>
+    <div class="logo-txt">
+      <h1>Swift Sync</h1>
+      <p>Zero Waste · Zero Hunger</p>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="nb on" onclick="showPage('home')">Home</button>
+    <button class="nb" onclick="showPage('donate')">Donate</button>
+    <button class="nb" onclick="showPage('request')">Request</button>
+    <button class="nb" onclick="showPage('heroes')">🏆 Heroes</button>
+    <button class="nb" onclick="showPage('ngos')">NGOs</button>
+    <button class="nb alert-nb" onclick="showPage('alerts')">🔴 Live Alerts</button>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-label">⚡ LIVE</div>
+  <div class="ticker-track"><div class="ticker-inner" id="tickerEl">
+    <span class="ti">🍱 URGENT — 40 meals at IIT Indore canteen, expires 8 PM — NGOs in Indore respond NOW</span>
+    <span class="ti">📊 Every day, India wastes enough food to feed 190 million people</span>
+    <span class="ti">💻 15 laptops available at TechFest Bangalore — collect within 24 hrs</span>
+    <span class="ti">🌍 820 million people sleep hungry tonight — your 1 action can change someone's day</span>
+    <span class="ti">🍱 80 meal packets — Mumbai Convention Center — post-event food — urgent!</span>
+    <span class="ti">📚 200 textbooks at Delhi University — engineering & commerce — free for students</span>
+    <span class="ti">🍱 URGENT — 40 meals at IIT Indore canteen, expires 8 PM — NGOs in Indore respond NOW</span>
+    <span class="ti">📊 Every day, India wastes enough food to feed 190 million people</span>
+    <span class="ti">💻 15 laptops available at TechFest Bangalore — collect within 24 hrs</span>
+    <span class="ti">🌍 820 million people sleep hungry tonight — your 1 action can change someone's day</span>
+    <span class="ti">🍱 80 meal packets — Mumbai Convention Center — post-event food — urgent!</span>
+    <span class="ti">📚 200 textbooks at Delhi University — engineering & commerce — free for students</span>
+  </div></div>
+</div>
+
+<!-- HOME PAGE -->
+<div class="page on" id="page-home">
+  <!-- Hero section -->
+  <div class="hero">
+    <div class="hero-badge">🌱 Making Every Meal Count</div>
+    <h2>One Plate Saved.<br><span>One Life Changed.</span></h2>
+    <p class="hero-sub">Every day, hotels, events, canteens throw away enough food to feed millions. Swift Sync connects surplus directly to need — in minutes, not days.</p>
+
+    <!-- Hunger stats -->
+    <div class="hunger-stats">
+      <div class="hstat">
+        <div class="hstat-num">820M</div>
+        <div class="hstat-lbl">People go to bed<br>hungry every night</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num">40%</div>
+        <div class="hstat-lbl">Food produced in India<br>is wasted annually</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num">7,000+</div>
+        <div class="hstat-lbl">Children die daily from<br>hunger-related causes</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num">₹92,000Cr</div>
+        <div class="hstat-lbl">Worth of food wasted<br>in India every year</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num">1 in 4</div>
+        <div class="hstat-lbl">Indian children are<br>underweight due to hunger</div>
+      </div>
+    </div>
+
+    <!-- Live hunger counter -->
+    <div class="live-counter-box">
+      <div class="lc-pulse"></div>
+      <div>
+        <div class="lc-text">People who went hungry in India today</div>
+        <div class="lc-num" id="hungerCounter">194,500,000</div>
+      </div>
+    </div>
+
+    <!-- Quotes -->
+    <div class="quote-card">
+      <q>The world produces enough food to feed everyone. Yet, one in nine people on the planet go to bed on an empty stomach each night. This is not a food scarcity problem — it's a food wastage problem.</q>
+      <div class="attr">— United Nations World Food Programme</div>
+    </div>
+    <div class="quote-card" style="margin-top:12px">
+      <q>Wasting food is like stealing from the table of those who are poor and hungry.</q>
+      <div class="attr">— Pope Francis</div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <!-- Dashboard stats -->
+    <div class="grid4" style="margin-bottom:22px">
+      <div class="sc"><div class="ico">📦</div><div class="num" id="s1">0</div><div class="lbl">Resources Shared</div></div>
+      <div class="sc"><div class="ico">🤝</div><div class="num" id="s2">0</div><div class="lbl">Successful Matches</div></div>
+      <div class="sc"><div class="ico">🏆</div><div class="num" id="s3">0</div><div class="lbl">Swift Heroes</div></div>
+      <div class="sc"><div class="ico">🏙️</div><div class="num" id="s4">6</div><div class="lbl">Cities Active</div></div>
+      <div class="sc"><div class="ico">🌱</div><div class="num" id="s5">0</div><div class="lbl">kg Waste Prevented</div></div>
+    </div>
+
+    <!-- Impact banner -->
+    <div class="impact-sec" style="margin-bottom:22px">
+      <h3><span class="dot-live"></span> Real-Time Impact Dashboard</h3>
+      <div class="imp-grid">
+        <div class="imp-item"><div class="imp-val" id="i1">0</div><div class="imp-lbl">Meals Saved</div></div>
+        <div class="imp-item"><div class="imp-val" id="i2">0</div><div class="imp-lbl">People Fed</div></div>
+        <div class="imp-item"><div class="imp-val" id="i3">0</div><div class="imp-lbl">Books Shared</div></div>
+        <div class="imp-item"><div class="imp-val" id="i4">0</div><div class="imp-lbl">Devices Recycled</div></div>
+        <div class="imp-item"><div class="imp-val" id="i5">0</div><div class="imp-lbl">kg CO₂ Saved</div></div>
+        <div class="imp-item"><div class="imp-val" id="i6">0</div><div class="imp-lbl">Families Helped</div></div>
+      </div>
+    </div>
+
+    <!-- Why we are different -->
+    <div class="sec-hd" style="margin-bottom:14px">✨ What Makes Swift Sync Different</div>
+    <div class="grid3" style="margin-bottom:28px">
+      <div class="card" style="text-align:center;border-top:3px solid #22c55e">
+        <div style="font-size:2em;margin-bottom:10px">⚡</div>
+        <div style="font-weight:700;color:#166534;margin-bottom:6px">City-Lock Matching</div>
+        <div style="font-size:.82em;color:#6b7280;line-height:1.6">Food never travels beyond your city. We match donor to NGO within same city in under 60 seconds.</div>
+      </div>
+      <div class="card" style="text-align:center;border-top:3px solid #f59e0b">
+        <div style="font-size:2em;margin-bottom:10px">🏆</div>
+        <div style="font-weight:700;color:#166534;margin-bottom:6px">Heroes & Honours</div>
+        <div style="font-size:.82em;color:#6b7280;line-height:1.6">Every act of kindness earns Swift Points. 15 contributions = Gift of Honour certificate. Real recognition for real impact.</div>
+      </div>
+      <div class="card" style="text-align:center;border-top:3px solid #8b5cf6">
+        <div style="font-size:2em;margin-bottom:10px">📊</div>
+        <div style="font-weight:700;color:#166534;margin-bottom:6px">Transparent Impact</div>
+        <div style="font-size:.82em;color:#6b7280;line-height:1.6">Know exactly who received your food, when, and how many people it served. Every donation has a verified story.</div>
+      </div>
+    </div>
+
+    <!-- Recent activity feed -->
+    <div class="grid2">
+      <div class="card">
+        <h3>📡 Community Feed</h3>
+        <div id="feed-list">
+          <div class="feed-item"><div class="feed-ico">🍱</div><div><div class="feed-text"><strong>Ramesh T.</strong> donated 60 meals after a wedding in Indore</div><div class="feed-time">5 min ago</div></div></div>
+          <div class="feed-item"><div class="feed-ico">🏆</div><div><div class="feed-text"><strong>Priya S.</strong> just earned Swift Silver badge — 10 donations!</div><div class="feed-time">18 min ago</div></div></div>
+          <div class="feed-item"><div class="feed-ico">🤝</div><div><div class="feed-text"><strong>Annapurna Sewa Trust</strong> claimed 40 meals — 80 people fed in Indore</div><div class="feed-time">32 min ago</div></div></div>
+          <div class="feed-item"><div class="feed-ico">📚</div><div><div class="feed-text"><strong>Gaurav M.</strong> donated 30 books to students in Delhi</div><div class="feed-time">1 hr ago</div></div></div>
+          <div class="feed-item"><div class="feed-ico">🌟</div><div><div class="feed-text"><strong>Neha K.</strong> earned Gift of Honour — 15 contributions milestone!</div><div class="feed-time">2 hr ago</div></div></div>
+          <div class="feed-item"><div class="feed-ico">💻</div><div><div class="feed-text"><strong>TechFest Bangalore</strong> listed 15 laptops for redistribution</div><div class="feed-time">3 hr ago</div></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>⚡ Urgent Alerts Near You</h3>
+        <div id="home-alerts"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DONATE PAGE -->
+<div class="page" id="page-donate">
+  <div class="wrap">
+    <div class="grid2">
+      <!-- Food alert -->
+      <div class="card">
+        <h3>🚨 Post Urgent Food Alert</h3>
+        <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:11px;font-size:.82em;color:#713f12;margin-bottom:14px;line-height:1.6">
+          ⚡ <strong>Use for time-sensitive food only.</strong> Event leftovers, wedding food, canteen surplus — we'll blast an alert to all NGOs in your city <em>instantly</em>.
+        </div>
+        <div class="fr"><label>Your Name</label><input type="text" id="dn-name" placeholder="Full name"></div>
+        <div class="fr"><label>📍 City</label>
+          <div class="chips" id="donCityChips">
+            <div class="citychip on" onclick="cx(this,'donCityChips')">Indore</div>
+            <div class="citychip" onclick="cx(this,'donCityChips')">Delhi</div>
+            <div class="citychip" onclick="cx(this,'donCityChips')">Mumbai</div>
+            <div class="citychip" onclick="cx(this,'donCityChips')">Bangalore</div>
+            <div class="citychip" onclick="cx(this,'donCityChips')">Pune</div>
+            <div class="citychip" onclick="cx(this,'donCityChips')">Hyderabad</div>
+          </div>
+        </div>
+        <div class="fr"><label>📌 Exact Pickup Location</label><input type="text" id="dn-loc" placeholder="e.g. IIT Indore Main Canteen, Gate 2"></div>
+        <div class="fr"><label>🍽️ Number of Meals</label><input type="number" id="dn-qty" placeholder="e.g. 40" min="1"></div>
+        <div class="fr"><label>⏰ Available Until</label><input type="time" id="dn-time"></div>
+        <div class="fr"><label>Description</label><textarea id="dn-desc" placeholder="e.g. Dal, rice, sabzi — vegetarian, packed in boxes, fresh from wedding..."></textarea></div>
+        <div class="fr"><label>📞 Contact</label><input type="tel" id="dn-phone" placeholder="+91 98765 43210"></div>
+        <button class="btn btn-r" onclick="postFoodAlert()">🚨 ALERT ALL NGOs IN MY CITY NOW</button>
+      </div>
+
+      <!-- Other resource -->
+      <div class="card">
+        <h3>📦 Donate Other Resources</h3>
+        <div class="fr"><label>Your Name</label><input type="text" id="dr-name" placeholder="Full name"></div>
+        <div class="fr"><label>Resource Type</label>
+          <div class="chips" id="resTypeChips">
+            <div class="chip on" onclick="cc(this,'resTypeChips')">📚 Books</div>
+            <div class="chip" onclick="cc(this,'resTypeChips')">💻 Electronics</div>
+            <div class="chip" onclick="cc(this,'resTypeChips')">👕 Clothes</div>
+            <div class="chip" onclick="cc(this,'resTypeChips')">🛒 Groceries</div>
+            <div class="chip" onclick="cc(this,'resTypeChips')">🧴 Medicines</div>
+            <div class="chip" onclick="cc(this,'resTypeChips')">🪑 Furniture</div>
+          </div>
+        </div>
+        <div class="fr"><label>City</label>
+          <div class="chips" id="resCityChips">
+            <div class="citychip on" onclick="cx(this,'resCityChips')">Indore</div>
+            <div class="citychip" onclick="cx(this,'resCityChips')">Delhi</div>
+            <div class="citychip" onclick="cx(this,'resCityChips')">Mumbai</div>
+            <div class="citychip" onclick="cx(this,'resCityChips')">Bangalore</div>
+          </div>
+        </div>
+        <div class="fr"><label>Quantity</label><input type="number" id="dr-qty" placeholder="e.g. 20" min="1"></div>
+        <div class="fr"><label>Pickup Address</label><input type="text" id="dr-loc" placeholder="Full address"></div>
+        <div class="fr"><label>Condition</label>
+          <select id="dr-cond"><option>Brand New</option><option>Good Condition</option><option>Fair / Used</option></select>
+        </div>
+        <div class="fr"><label>Contact</label><input type="tel" id="dr-phone" placeholder="+91..."></div>
+        <button class="btn btn-g" onclick="postResource()">Post Donation 📤</button>
+
+        <div style="margin-top:16px;padding:12px;background:#f0fdf4;border-radius:8px;border:1px solid #d1fae5">
+          <div style="font-size:.8em;font-weight:700;color:#166534;margin-bottom:4px">🎯 Your Swift Points</div>
+          <div style="font-size:.78em;color:#6b7280">Every donation = +10 Swift Points. Reach 150 points (15 actions) to earn your <strong>Gift of Honour</strong> certificate!</div>
+          <div style="font-size:.78em;color:#16a34a;margin-top:6px;font-weight:600">You need to register to track your points →</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Register CTA -->
+    <div class="card" style="margin-top:20px;background:linear-gradient(135deg,#f0fdf4,#dcfce7)">
+      <h3>👤 Register as a Donor — Track Your Impact</h3>
+      <div class="grid2">
+        <div>
+          <div class="fr"><label>Full Name</label><input type="text" id="reg-name" placeholder="Your name"></div>
+          <div class="fr"><label>Email</label><input type="email" id="reg-email" placeholder="you@email.com"></div>
+          <div class="fr"><label>City</label>
+            <div class="chips" id="regCityChips">
+              <div class="citychip on" onclick="cx(this,'regCityChips')">Indore</div>
+              <div class="citychip" onclick="cx(this,'regCityChips')">Delhi</div>
+              <div class="citychip" onclick="cx(this,'regCityChips')">Mumbai</div>
+              <div class="citychip" onclick="cx(this,'regCityChips')">Bangalore</div>
+            </div>
+          </div>
+          <button class="btn btn-g" onclick="registerDonor()">Join Swift Sync 🌱</button>
+        </div>
+        <div style="padding:10px 0">
+          <div style="font-size:.88em;color:#166534;font-weight:700;margin-bottom:12px">What you get:</div>
+          <div style="font-size:.82em;color:#374151;line-height:2">
+            ✅ Personal Swift Score card<br>
+            ✅ Badge progression (Bronze → Silver → Gold → Legend)<br>
+            ✅ Gift of Honour certificate at 15 donations<br>
+            ✅ Featured on Hall of Heroes<br>
+            ✅ Annual Impact Report with your name<br>
+            ✅ Verified Swift Sync Donor badge
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REQUEST PAGE -->
+<div class="page" id="page-request">
+  <div class="wrap" style="max-width:900px">
+    <div class="card">
+      <h3>🎯 NGO Resource Request</h3>
+      <div class="fr"><label>NGO / Organization</label><input type="text" id="rq-org" placeholder="Your NGO name"></div>
+      <div class="fr"><label>City</label>
+        <div class="chips" id="reqCityChips">
+          <div class="citychip on" onclick="cx(this,'reqCityChips')">Indore</div>
+          <div class="citychip" onclick="cx(this,'reqCityChips')">Delhi</div>
+          <div class="citychip" onclick="cx(this,'reqCityChips')">Mumbai</div>
+          <div class="citychip" onclick="cx(this,'reqCityChips')">Bangalore</div>
+          <div class="citychip" onclick="cx(this,'reqCityChips')">Pune</div>
+        </div>
+      </div>
+      <div class="fr"><label>Resource Needed</label>
+        <div class="chips" id="reqTypeChips">
+          <div class="chip on" onclick="cc(this,'reqTypeChips')">🍱 Food</div>
+          <div class="chip" onclick="cc(this,'reqTypeChips')">📚 Books</div>
+          <div class="chip" onclick="cc(this,'reqTypeChips')">💻 Electronics</div>
+          <div class="chip" onclick="cc(this,'reqTypeChips')">👕 Clothes</div>
+        </div>
+      </div>
+      <div class="fr"><label>Urgency</label>
+        <div class="urgrow">
+          <button class="ub low" onclick="selUrg(this,'low')">🟢 Low</button>
+          <button class="ub med on" onclick="selUrg(this,'med')">🟡 Medium</button>
+          <button class="ub high" onclick="selUrg(this,'high')">🔴 High</button>
+        </div>
+      </div>
+      <div class="fr"><label>Quantity Needed</label><input type="number" id="rq-qty" placeholder="e.g. 50" min="1"></div>
+      <div class="fr"><label>Beneficiary Details</label><textarea id="rq-purpose" placeholder="Who will benefit? e.g. daily wage workers at our shelter in Vijay Nagar, Indore..."></textarea></div>
+      <div class="fr"><label>Contact</label><input type="tel" id="rq-phone" placeholder="+91..."></div>
+      <button class="btn btn-g" onclick="postRequest()">Submit Request 🎯</button>
+    </div>
+
+    <div class="card" style="margin-top:20px">
+      <h3>🔗 Matches Found in Your City</h3>
+      <div id="req-matches"><div class="empty"><span>🔍</span>Submit a request to see live matches from donors in your city</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- HEROES PAGE -->
+<div class="page" id="page-heroes">
+  <div class="wrap">
+    <!-- Emotional header -->
+    <div style="background:linear-gradient(135deg,#052e16,#14532d);border-radius:14px;padding:28px;text-align:center;color:white;margin-bottom:24px">
+      <div style="font-size:2em;margin-bottom:10px">🌟</div>
+      <div style="font-size:1.4em;font-weight:800;color:#22c55e;margin-bottom:10px">Hall of Heroes</div>
+      <p style="color:#a7f3d0;font-size:.9em;max-width:520px;margin:0 auto;line-height:1.7">These are the people who chose to act. Every name here represents a meal that didn't go to waste — and a hunger that was answered.</p>
+      <div class="quote-card" style="margin-top:18px;max-width:520px">
+        <q>No act of kindness, however small, is ever wasted.</q>
+        <div class="attr">— Aesop</div>
+      </div>
+    </div>
+
+    <!-- Badge system explanation -->
+    <div class="card" style="margin-bottom:22px">
+      <h3>🎖️ Swift Badge System</h3>
+      <div class="grid4" style="text-align:center">
+        <div style="padding:14px;background:#f9fafb;border-radius:10px;border:1.5px solid #e5e7eb">
+          <div style="font-size:1.8em">🥉</div>
+          <div style="font-weight:700;color:#713f12;margin-top:6px">Swift Bronze</div>
+          <div style="font-size:.75em;color:#9ca3af;margin-top:3px">3 donations</div>
+          <div style="font-size:.72em;color:#6b7280;margin-top:5px">You've started your journey</div>
+        </div>
+        <div style="padding:14px;background:#f8fafc;border-radius:10px;border:1.5px solid #94a3b8">
+          <div style="font-size:1.8em">🥈</div>
+          <div style="font-weight:700;color:#475569;margin-top:6px">Swift Silver</div>
+          <div style="font-size:.75em;color:#9ca3af;margin-top:3px">10 donations</div>
+          <div style="font-size:.72em;color:#6b7280;margin-top:5px">You're changing lives</div>
+        </div>
+        <div style="padding:14px;background:#fefce8;border-radius:10px;border:1.5px solid #fde68a">
+          <div style="font-size:1.8em">🥇</div>
+          <div style="font-weight:700;color:#713f12;margin-top:6px">Swift Gold</div>
+          <div style="font-size:.75em;color:#9ca3af;margin-top:3px">15 donations</div>
+          <div style="font-size:.72em;color:#92400e;margin-top:5px">🎁 Gift of Honour</div>
+        </div>
+        <div style="padding:14px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);border-radius:10px;border:1.5px solid #c4b5fd">
+          <div style="font-size:1.8em">👑</div>
+          <div style="font-weight:700;color:#4c1d95;margin-top:6px">Swift Legend</div>
+          <div style="font-size:.75em;color:#9ca3af;margin-top:3px">30+ donations</div>
+          <div style="font-size:.72em;color:#6d28d9;margin-top:5px">Eternal Wall of Fame</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gift of Honour wall -->
+    <div class="sec-hd" style="margin-bottom:14px">🎁 Gift of Honour Recipients</div>
+    <div class="grid3" style="margin-bottom:24px" id="honor-wall">
+      <div class="honor-card"><div class="honor-medal">👑</div><div class="honor-crown">🏆</div><div class="honor-name">Neha Kulkarni</div><div style="font-size:.78em;color:#92400e">Indore · 28 donations</div><div style="margin-top:8px"><span class="badge b-gold">Swift Legend</span></div><div class="honor-badge-lbl">Gift of Honour · Batch 2024</div></div>
+      <div class="honor-card"><div class="honor-medal">🥇</div><div class="honor-crown">🌟</div><div class="honor-name">Arjun Sharma</div><div style="font-size:.78em;color:#92400e">Delhi · 18 donations</div><div style="margin-top:8px"><span class="badge b-gold">Swift Gold</span></div><div class="honor-badge-lbl">Gift of Honour · Batch 2024</div></div>
+      <div class="honor-card"><div class="honor-medal">🥇</div><div class="honor-crown">💫</div><div class="honor-name">Fatima Shaikh</div><div style="font-size:.78em;color:#92400e">Mumbai · 15 donations</div><div style="margin-top:8px"><span class="badge b-gold">Swift Gold</span></div><div class="honor-badge-lbl">Gift of Honour · Batch 2024</div></div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="grid2">
+      <div class="card">
+        <h3>🏆 Top Donors This Month</h3>
+        <div class="scroll-box" id="leaderboard"></div>
+      </div>
+      <div class="card">
+        <h3>🏥 Top NGOs This Month</h3>
+        <div class="scroll-box" id="ngo-leaderboard"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NGOs PAGE -->
+<div class="page" id="page-ngos">
+  <div class="wrap">
+    <div class="sec-hd" style="margin-bottom:14px">🏥 Enrolled NGOs</div>
+    <div class="chips" id="ngoFilterChips" style="margin-bottom:18px">
+      <div class="citychip on" onclick="filterNGOs(this,'all')">All Cities</div>
+      <div class="citychip" onclick="filterNGOs(this,'Indore')">Indore</div>
+      <div class="citychip" onclick="filterNGOs(this,'Delhi')">Delhi</div>
+      <div class="citychip" onclick="filterNGOs(this,'Mumbai')">Mumbai</div>
+      <div class="citychip" onclick="filterNGOs(this,'Bangalore')">Bangalore</div>
+      <div class="citychip" onclick="filterNGOs(this,'Pune')">Pune</div>
+    </div>
+    <div id="ngo-list"></div>
+  </div>
+</div>
+
+<!-- ALERTS PAGE -->
+<div class="page" id="page-alerts">
+  <div class="wrap">
+    <div class="sec-hd" style="margin-bottom:6px"><span class="dot-live"></span> Live Resource Alerts</div>
+    <p style="font-size:.82em;color:#6b7280;margin-bottom:16px">Only showing alerts within your selected city — food cannot travel far.</p>
+    <div class="chips" id="alertFilterChips" style="margin-bottom:20px">
+      <div class="citychip on" onclick="filterAlerts(this,'all')">All Cities</div>
+      <div class="citychip" onclick="filterAlerts(this,'Indore')">Indore</div>
+      <div class="citychip" onclick="filterAlerts(this,'Delhi')">Delhi</div>
+      <div class="citychip" onclick="filterAlerts(this,'Mumbai')">Mumbai</div>
+      <div class="citychip" onclick="filterAlerts(this,'Bangalore')">Bangalore</div>
+    </div>
+    <div id="alerts-list"></div>
+  </div>
+</div>
+
+<script>
+// ---- DATA ----
+const NGOS = [
+  {id:1,name:'Annapurna Sewa Trust',city:'Indore',type:'Food',av:'AS',phone:'+91 7312 345678',active:true,helped:142},
+  {id:2,name:'Gyan Jyoti Foundation',city:'Indore',type:'Books & Electronics',av:'GJ',phone:'+91 7313 456789',active:true,helped:67},
+  {id:3,name:'Vidya Dan Samiti',city:'Indore',type:'Books',av:'VD',phone:'+91 7315 678901',active:true,helped:43},
+  {id:4,name:'Roti Bank Delhi',city:'Delhi',type:'Food',av:'RB',phone:'+91 1123 456789',active:true,helped:210},
+  {id:5,name:'EduReach NGO',city:'Delhi',type:'Books',av:'ER',phone:'+91 1124 567890',active:true,helped:88},
+  {id:6,name:'Digital Donate Delhi',city:'Delhi',type:'Electronics',av:'DD',phone:'+91 1126 789012',active:true,helped:34},
+  {id:7,name:'Hunger No More',city:'Mumbai',type:'Food',av:'HN',phone:'+91 2223 456789',active:true,helped:176},
+  {id:8,name:'Green Tech Recycle',city:'Mumbai',type:'Electronics',av:'GT',phone:'+91 2224 567890',active:false,helped:21},
+  {id:9,name:'Akshaya Patra',city:'Bangalore',type:'Food',av:'AP',phone:'+91 8023 456789',active:true,helped:290},
+  {id:10,name:'Books for All',city:'Bangalore',type:'Books',av:'BA',phone:'+91 8024 567890',active:true,helped:55},
+  {id:11,name:'Nourish Pune',city:'Pune',type:'Food',av:'NP',phone:'+91 2025 456789',active:true,helped:78},
+  {id:12,name:'Vaayu Welfare',city:'Pune',type:'Clothes',av:'VW',phone:'+91 2026 567890',active:false,helped:15},
+];
+
+let seedAlerts = [
+  {id:'a1',type:'food',city:'Indore',loc:'IIT Indore Main Canteen, Gate 2',qty:40,desc:'Dal, rice, sabzi — vegetarian, full meal boxes',time:'8:00 PM',phone:'+91 98123 00001',urg:'high',status:'open',posted:'3 min ago',donor:'Ramesh T.'},
+  {id:'a2',type:'food',city:'Delhi',loc:'Delhi University Convention Hall, North Campus',qty:80,desc:'Biryani + raita + dessert — post-conference food',time:'7:30 PM',phone:'+91 98234 00002',urg:'high',status:'open',posted:'18 min ago',donor:'Priya V.'},
+  {id:'a3',type:'books',city:'Indore',loc:'Devi Ahilya University Library, Room 12',qty:120,desc:'Engineering textbooks 1st–4th year, good condition',time:null,phone:'+91 98345 00003',urg:'low',status:'open',posted:'1 hr ago',donor:'DAVV College'},
+  {id:'a4',type:'food',city:'Mumbai',loc:'Bandra Convention Center, Exit B',qty:60,desc:'Veg + non-veg packages from corporate event',time:'9:00 PM',phone:'+91 98456 00004',urg:'high',status:'claimed',posted:'50 min ago',donor:'TechCorp Event',claimedBy:'Hunger No More'},
+  {id:'a5',type:'electronics',city:'Bangalore',loc:'TechFest IISC Campus, Stall 7',qty:15,desc:'Used laptops, fully working, 4–6 yr old',time:null,phone:'+91 98567 00005',urg:'med',status:'open',posted:'2 hr ago',donor:'TechFest Org'},
+];
+
+let donors = [
+  {name:'Neha Kulkarni',city:'Indore',pts:280,donations:28,badge:'👑 Legend',color:'#4c1d95'},
+  {name:'Arjun Sharma',city:'Delhi',pts:180,donations:18,badge:'🥇 Gold',color:'#713f12'},
+  {name:'Fatima Shaikh',city:'Mumbai',pts:150,donations:15,badge:'🥇 Gold',color:'#713f12'},
+  {name:'Deepak Rao',city:'Bangalore',pts:100,donations:10,badge:'🥈 Silver',color:'#475569'},
+  {name:'Simran Kaur',city:'Delhi',pts:90,donations:9,badge:'🥈 Silver',color:'#475569'},
+  {name:'Karthik M.',city:'Bangalore',pts:70,donations:7,badge:'🥈 Silver',color:'#475569'},
+  {name:'Pooja Jain',city:'Indore',pts:30,donations:3,badge:'🥉 Bronze',color:'#78350f'},
+];
+
+const S = {matches:0,total:0,impact:{food:0,people:0,books:0,ewaste:0,co2:0,fam:0}};
+
+// ---- CHIP SELECTORS ----
+function cc(el,gid){document.getElementById(gid).querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));el.classList.add('on')}
+function cx(el,gid){el.closest('.chips').querySelectorAll('.citychip').forEach(c=>c.classList.remove('on'));el.classList.add('on')}
+function selUrg(el,lvl){document.querySelectorAll('.ub').forEach(b=>b.classList.remove('on'));el.classList.add('on')}
+
+// ---- NAVIGATION ----
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('page-'+name).classList.add('on');
+  const map={home:0,donate:1,request:2,heroes:3,ngos:4,alerts:5};
+  const idx=map[name];
+  if(idx!==undefined) document.querySelectorAll('.nb')[idx].classList.add('on');
+  if(name==='heroes') renderLeaderboard();
+  if(name==='ngos') renderNGOs('all');
+  if(name==='alerts') renderAlerts('all');
+  if(name==='home') renderHomeAlerts();
+}
+
+// ---- POST FOOD ALERT ----
+function postFoodAlert(){
+  const name=document.getElementById('dn-name').value.trim();
+  const loc=document.getElementById('dn-loc').value.trim();
+  const qty=parseInt(document.getElementById('dn-qty').value);
+  const time=document.getElementById('dn-time').value;
+  const desc=document.getElementById('dn-desc').value.trim();
+  const phone=document.getElementById('dn-phone').value.trim();
+  const city=document.getElementById('donCityChips').querySelector('.on').textContent.trim();
+  if(!loc||!qty||!phone){toast('Please fill location, quantity and phone','warn');return;}
+  const al={id:'a'+Date.now(),type:'food',city,loc,qty,desc:desc||'Food available',time:time||'ASAP',phone,urg:'high',status:'open',posted:'Just now',donor:name||'Anonymous'};
+  seedAlerts.unshift(al);
+  S.total++;
+  // Clear form
+  ['dn-name','dn-loc','dn-qty','dn-desc','dn-phone'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('dn-time').value='';
+  // Count NGOs in city
+  const cnt=NGOS.filter(n=>n.city===city&&n.active).length;
+  addTicker(`🚨 URGENT: ${qty} meals at ${loc}, ${city} — expires ${time||'soon'} — ${name||'donor'} posted now!`);
+  updateStats();
+  renderHomeAlerts();
+  toast(`✅ Alert sent! ${cnt} active NGOs in ${city} notified instantly.`,'success');
+  showPage('alerts');
+}
+
+// ---- POST RESOURCE ----
+function postResource(){
+  const qty=parseInt(document.getElementById('dr-qty').value);
+  const loc=document.getElementById('dr-loc').value.trim();
+  const city=document.getElementById('resCityChips').querySelector('.on').textContent.trim();
+  const type=document.getElementById('resTypeChips').querySelector('.on').textContent.trim();
+  const name=document.getElementById('dr-name').value.trim();
+  if(!qty||!loc){toast('Please fill quantity and location','warn');return;}
+  const al={id:'a'+Date.now(),type:'resource',city,loc,qty,desc:`${type} donation — ${document.getElementById('dr-cond').value}`,time:null,phone:document.getElementById('dr-phone').value,urg:'low',status:'open',posted:'Just now',donor:name||'Anonymous'};
+  seedAlerts.unshift(al);
+  S.total++;
+  ['dr-name','dr-qty','dr-loc','dr-phone'].forEach(id=>document.getElementById(id).value='');
+  updateStats();
+  toast(`${type} posted in ${city}! NGOs will be notified.`,'success');
+}
+
+// ---- REGISTER ----
+function registerDonor(){
+  const name=document.getElementById('reg-name').value.trim();
+  const email=document.getElementById('reg-email').value.trim();
+  const city=document.getElementById('regCityChips').querySelector('.on').textContent.trim();
+  if(!name||!email){toast('Please enter name and email','warn');return;}
+  donors.push({name,city,pts:0,donations:0,badge:'🌱 Newcomer',color:'#166534'});
+  ['reg-name','reg-email'].forEach(id=>document.getElementById(id).value='');
+  toast(`Welcome to Swift Sync, ${name}! Your journey begins. 🌱`,'success');
+  renderLeaderboard();
+}
+
+// ---- POST REQUEST ----
+function postRequest(){
+  const org=document.getElementById('rq-org').value.trim();
+  const qty=parseInt(document.getElementById('rq-qty').value);
+  const city=document.getElementById('reqCityChips').querySelector('.on').textContent.trim();
+  if(!org||!qty){toast('Please fill organization and quantity','warn');return;}
+  // Match in same city only
+  const matches=seedAlerts.filter(a=>a.city===city&&a.status==='open');
+  const el=document.getElementById('req-matches');
+  if(matches.length>0){
+    el.innerHTML=matches.map(m=>`
+      <div style="background:#f0fdf4;border:1.5px solid #d1fae5;border-radius:10px;padding:14px;margin-bottom:10px">
+        <div style="font-weight:600;font-size:.9em;color:#166534">${m.desc}</div>
+        <div style="font-size:.78em;color:#555;margin:6px 0">📍 ${m.loc} · 📦 ${m.qty} items · 📞 ${m.phone}</div>
+        <div style="font-size:.78em;color:#16a34a;font-weight:600;margin-bottom:7px">Match Score: ${80+Math.floor(Math.random()*20)}% — Same city verified ✓</div>
+        <div class="sbar"><div class="sfill" style="width:${85+Math.floor(Math.random()*15)}%"></div></div>
+        <div style="display:flex;gap:7px;margin-top:10px">
+          <button class="bsm grn" onclick="claimAlert('${m.id}','${org}')">Claim Resource</button>
+          <button class="bsm blu" onclick="toast('Donor ${m.donor} notified. They will contact you shortly.','success')">Contact Donor</button>
+        </div>
+      </div>`).join('');
+  } else {
+    el.innerHTML=`<div class="empty"><span>🌿</span>No open resources in ${city} right now. We'll notify you the moment something is posted!</div>`;
+  }
+  ['rq-org','rq-qty','rq-purpose','rq-phone'].forEach(id=>document.getElementById(id).value='');
+  toast(`Request submitted! Searching matches in ${city}`,'success');
+}
+
+// ---- CLAIM ----
+function claimAlert(id,org){
+  const al=seedAlerts.find(a=>a.id===id);
+  if(al&&al.status==='open'){
+    al.status='claimed';al.claimedBy=org||'NGO';
+    S.matches++;
+    if(al.type==='food'){S.impact.food+=al.qty;S.impact.people+=Math.round(al.qty/1.2);S.impact.co2+=Math.round(al.qty*.15);S.impact.fam+=Math.round(al.qty/6);}
+    if(al.type==='books'||al.desc.includes('Books')){S.impact.books+=al.qty;}
+    if(al.type==='electronics'||al.desc.includes('laptop')||al.desc.includes('Electronic')){S.impact.ewaste+=al.qty;}
+    updateStats();
+    renderHomeAlerts();
+    renderAlerts('all');
+    addFeed(`🤝 <strong>${org||'An NGO'}</strong> just claimed ${al.qty} ${al.type==='food'?'meals':'items'} in ${al.city}`);
+    toast(`Claimed! Donor has been notified. Coordinate pickup now.`,'success');
+  }
+}
+
+// ---- LEADERBOARD ----
+function renderLeaderboard(){
+  const el=document.getElementById('leaderboard');
+  const sorted=[...donors].sort((a,b)=>b.pts-a.pts);
+  el.innerHTML=sorted.map((d,i)=>`
+    <div class="hero-profile">
+      <div class="hero-rank">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>
+      <div class="hero-avatar" style="background:linear-gradient(135deg,${d.color},${d.color}aa)">${d.name.split(' ').map(n=>n[0]).join('').slice(0,2)}</div>
+      <div class="hero-info">
+        <div class="hero-name">${d.name}</div>
+        <div class="hero-city">📍 ${d.city} · ${d.badge}</div>
+        <div class="prog-wrap">
+          <div class="prog-bar"><div class="prog-fill" style="width:${Math.min(100,d.pts/3)}%"></div></div>
+        </div>
+      </div>
+      <div class="hero-stat"><div class="hs-num">${d.donations}</div><div class="hs-lbl">donations</div></div>
+    </div>`).join('');
+
+  const nel=document.getElementById('ngo-leaderboard');
+  nel.innerHTML=[...NGOS].filter(n=>n.active).sort((a,b)=>b.helped-a.helped).map((n,i)=>`
+    <div class="hero-profile">
+      <div class="hero-rank">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>
+      <div class="ngo-av" style="width:46px;height:46px;font-size:.9em">${n.av}</div>
+      <div class="hero-info">
+        <div class="hero-name">${n.name}</div>
+        <div class="hero-city">📍 ${n.city} · ${n.type}</div>
+        <div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:${Math.min(100,n.helped/3)}%"></div></div></div>
+      </div>
+      <div class="hero-stat"><div class="hs-num">${n.helped}</div><div class="hs-lbl">people helped</div></div>
+    </div>`).join('');
+}
+
+// ---- NGO LIST ----
+function renderNGOs(city){
+  const list=city==='all'?NGOS:NGOS.filter(n=>n.city===city);
+  document.getElementById('ngo-list').innerHTML=list.map(n=>`
+    <div class="ngo-card">
+      <div class="ngo-hd">
+        <div class="ngo-av">${n.av}</div>
+        <div style="flex:1"><div style="font-weight:700;font-size:.92em">${n.name}</div><div style="font-size:.75em;color:#16a34a">📍 ${n.city} · ${n.type}</div></div>
+        <span class="badge ${n.active?'b-grn':'b-red'}">${n.active?'Active':'Inactive'}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:.78em;color:#555">
+        <span>📞 ${n.phone} · 🤝 ${n.helped} helped</span>
+        <button class="bsm blu" style="flex:none;padding:6px 12px;font-size:.78em" onclick="toast('📲 Notified ${n.name} in ${n.city}!','success')">Notify</button>
+      </div>
+    </div>`).join('');
+}
+
+function filterNGOs(el,city){
+  el.closest('.chips').querySelectorAll('.citychip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  renderNGOs(city);
+}
+
+// ---- ALERTS ----
+function renderAlerts(city){
+  const list=city==='all'?seedAlerts:seedAlerts.filter(a=>a.city===city);
+  const el=document.getElementById('alerts-list');
+  if(!list.length){el.innerHTML='<div class="empty"><span>📭</span>No alerts here yet</div>';return;}
+  el.innerHTML=list.map(a=>`
+    <div class="alcard ${a.urg==='high'?'urg':a.urg==='med'?'med':'low'}">
+      <div class="ah">
+        <div>
+          <div class="at">${a.type==='food'?'🍱':'📦'} ${a.desc}</div>
+          <div style="font-size:.75em;color:#666;margin-top:3px">📍 ${a.loc}, ${a.city} · posted ${a.posted}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
+          <span class="badge ${a.urg==='high'?'b-red':a.urg==='med'?'b-amb':'b-grn'}">${a.urg==='high'?'URGENT':a.urg==='med'?'MEDIUM':'LOW'}</span>
+          ${a.status==='claimed'?`<span class="badge b-blue">✓ Claimed</span>`:''}
+        </div>
+      </div>
+      <div class="am">
+        <span>📦 ${a.qty} ${a.type==='food'?'meals':'items'}</span>
+        <span>📞 ${a.phone}</span>
+        ${a.time?`<span>⏰ Until ${a.time}</span>`:''}
+        ${a.donor?`<span>👤 ${a.donor}</span>`:''}
+      </div>
+      ${a.status==='claimed'?
+        `<div style="font-size:.8em;color:#059669;font-weight:600">✅ Claimed by ${a.claimedBy||'NGO'}</div>`:
+        `<div class="ar">
+          <button class="bsm grn" onclick="claimAlert('${a.id}')">Claim</button>
+          <button class="bsm gray" onclick="dismissAl('${a.id}')">Dismiss</button>
+          <button class="bsm blu" onclick="notifyAllNGOs('${a.city}')">Notify All NGOs in ${a.city}</button>
+        </div>`}
+    </div>`).join('');
+}
+
+function filterAlerts(el,city){
+  el.closest('.chips').querySelectorAll('.citychip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  renderAlerts(city);
+}
+
+function dismissAl(id){seedAlerts=seedAlerts.filter(a=>a.id!==id);renderAlerts('all');}
+function notifyAllNGOs(city){const cnt=NGOS.filter(n=>n.city===city&&n.active).length;toast(`📲 All ${cnt} NGOs in ${city} notified!`,'success');}
+
+// ---- HOME ALERTS ----
+function renderHomeAlerts(){
+  const el=document.getElementById('home-alerts');
+  const open=seedAlerts.filter(a=>a.status==='open').slice(0,4);
+  if(!open.length){el.innerHTML='<div class="empty"><span>✅</span>All current resources matched!</div>';return;}
+  el.innerHTML=open.map(a=>`
+    <div class="alcard ${a.urg==='high'?'urg':'low'}" style="margin-bottom:10px">
+      <div style="font-weight:600;font-size:.85em">${a.type==='food'?'🍱':'📦'} ${a.desc.slice(0,55)}${a.desc.length>55?'...':''}</div>
+      <div style="font-size:.75em;color:#666;margin:4px 0">📍 ${a.city} · 📦 ${a.qty} ${a.type==='food'?'meals':'items'}</div>
+      <div style="display:flex;gap:6px;margin-top:7px">
+        <button class="bsm grn" onclick="claimAlert('${a.id}')">Claim</button>
+        <button class="bsm blu" onclick="notifyAllNGOs('${a.city}')">Alert NGOs</button>
+      </div>
+    </div>`).join('');
+}
+
+// ---- STATS ----
+function updateStats(){
+  document.getElementById('s1').textContent=S.total+seedAlerts.length;
+  document.getElementById('s2').textContent=S.matches;
+  document.getElementById('s3').textContent=donors.filter(d=>d.donations>=3).length;
+  document.getElementById('s5').textContent=Math.round(S.impact.food*.5);
+  document.getElementById('i1').textContent=S.impact.food;
+  document.getElementById('i2').textContent=S.impact.people;
+  document.getElementById('i3').textContent=S.impact.books;
+  document.getElementById('i4').textContent=S.impact.ewaste;
+  document.getElementById('i5').textContent=S.impact.co2;
+  document.getElementById('i6').textContent=S.impact.fam;
+}
+
+// ---- FEED ----
+function addFeed(html){
+  const feed=document.getElementById('feed-list');
+  const div=document.createElement('div');
+  div.className='feed-item';
+  div.innerHTML=`<div class="feed-ico">🤝</div><div><div class="feed-text">${html}</div><div class="feed-time">Just now</div></div>`;
+  feed.prepend(div);
+}
+
+// ---- TICKER ----
+function addTicker(msg){
+  const ti=document.getElementById('tickerEl');
+  const spans=document.querySelectorAll('.ti');
+  for(let i=0;i<2;i++){const sp=document.createElement('span');sp.className='ti';sp.style.color='#fde68a';sp.style.fontWeight='700';sp.textContent=msg;ti.insertBefore(sp,ti.firstChild);}
+}
+
+// ---- TOAST ----
+function toast(msg,type='success'){
+  const t=document.createElement('div');
+  t.className='toast';
+  t.style.background=type==='success'?'#166534':type==='warn'?'#d97706':'#dc2626';
+  t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),3500);
+}
+
+// ---- LIVE HUNGER COUNTER (ticks up) ----
+let hc=194500000;
+setInterval(()=>{
+  hc+=Math.floor(Math.random()*3+1);
+  const el=document.getElementById('hungerCounter');
+  if(el) el.textContent=hc.toLocaleString('en-IN');
+},2000);
+
+// ---- INIT ----
+updateStats();
+renderHomeAlerts();
+</script>
